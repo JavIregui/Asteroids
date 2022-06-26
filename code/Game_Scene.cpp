@@ -106,6 +106,7 @@ namespace example
             {
                 case ID(touch-started):         // El usuario toca la pantalla
                 {
+                    /// Eventos de Giro
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .2f
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * .2f + 200
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -123,6 +124,7 @@ namespace example
 
                     }
 
+                    /// Avance del jugador
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .9f
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * 1.f
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -131,6 +133,7 @@ namespace example
                         move = true;
 
                     }
+                    /// Disparo
                     else if((*event[ID(x)].as< var::Float > ()) > canvas_width * .8f - 100
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * 8.f - 200
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -149,6 +152,7 @@ namespace example
                 }
                 case ID(touch-moved):
                 {
+                    /// Eventos de Giro
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .2f
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * .2f + 200
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -166,7 +170,7 @@ namespace example
 
                     }
 
-
+                    /// Avance del jugador
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .9f
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * 1.f
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -180,10 +184,11 @@ namespace example
 
                 case ID(touch-ended):       // El usuario deja de tocar la pantalla
                 {
+                    /// Para el giro
                     right = false;
                     left = false;
 
-
+                    /// Detiene el avance
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .9f
                        && (*event[ID(x)].as< var::Float > ()) < canvas_width * 1.f
                        && (*event[ID(y)].as< var::Float > ()) > canvas_height * .0f
@@ -193,7 +198,7 @@ namespace example
 
                     }
 
-
+                    /// Botón de pausa
                     if((*event[ID(x)].as< var::Float > ()) > canvas_width * .0f
                     && (*event[ID(x)].as< var::Float > ()) < canvas_width * .1f + 100
                     && (*event[ID(y)].as< var::Float > ()) > canvas_height * .8f
@@ -207,9 +212,11 @@ namespace example
                 }
             }
         }
+        /// Continúa el juego desde la pantalla de pausa
         else if(state == PAUSE){
             state = RUNNING;
         }
+        /// Vuelve al menú desde la pantalla de GameOver
         else if(state == GAME_OVER){
             director.run_scene (shared_ptr< Scene >(new Menu_Scene));
         }
@@ -217,6 +224,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Actualiza la escena dependiendo de su estado
     void Game_Scene::update (float time)
     {
         if (!suspended) switch (state)
@@ -224,12 +232,13 @@ namespace example
             case LOADING: load_textures  ();     break;
             case RUNNING: run_simulation (time); break;
             case PAUSE: break;
-            case ERROR:   break;
+            case ERROR: break;
         }
     }
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Dibuja la escena dependiendo de su estado
     void Game_Scene::render (Context & context)
     {
         if (!suspended)
@@ -303,6 +312,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Crea el Sprite del jugador
     void Game_Scene::create_sprites ()
     {
         Sprite_Handle    player_sprite(new Sprite( textures[ID(player)].get () ));
@@ -332,6 +342,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Comienza el juego tras el primer toque
     void Game_Scene::start_playing ()
     {
         gameplay = PLAYING;
@@ -339,14 +350,17 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Actualiza la escena mientras el estado es RUNNING
     void Game_Scene::run_simulation (float time)
     {
         if(gameplay == PLAYING){
 
+            /// Actualiza el jugador
             for (auto & sprite : sprites)
             {
                 sprite->update (time);
             }
+            /// Actualiza las balas y las elimina al salir de la pantalla
             for (auto & bullet : bullets)
             {
                 bullet->update (time);
@@ -358,7 +372,7 @@ namespace example
                     bullet->hide();
                 }
             }
-
+            /// Crea asteroides de forma aleatoria
             if(rand() % 10 == 0){
                 Sprite_Handle newAsteroid(new Sprite( textures[ID(asteroide)].get () ));
                 newAsteroid->set_anchor(CENTER);
@@ -376,7 +390,7 @@ namespace example
 
                 asteroids.push_back(newAsteroid);
             }
-
+            /// Actualiza los asteroides y los elimina al salir de la escena
             for (auto & asteroid : asteroids)
             {
                 asteroid->update (time);
@@ -389,31 +403,31 @@ namespace example
                 }
             }
         }
-
+        /// Controla al jugador
         update_user ();
+        /// Comprueba las colisiones
         check_collisions ();
     }
 
     // ---------------------------------------------------------------------------------------------
-    // Se hace que el player dechero se mueva hacia arriba o hacia abajo según el usuario esté
-    // tocando la pantalla por encima o por debajo de su centro. Cuando el usuario no toca la
-    // pantalla se deja al player quieto.
 
     void Game_Scene::update_user ()
     {
+        /// Controla el giro
         if(right){
             angle = angle - .1f;
         }
         if(left){
             angle = angle + .1f;
         }
+        /// Controla la velocidad del jugador
         if(move){
             player->set_speed(Vector2f(cos(angle) * 0 - sin(angle) * 1, sin(angle) * 0 + cos(angle) * 1) * 200);
         }
         else{
             player->set_speed(Vector2f(0, 0));
         }
-
+        /// Impide que el jugador se salga de la escena
         if(player->get_position_x() < 25 || player->get_position_x() > canvas_width - 25){
             player->set_speed_x(0);
             if(player->get_position_x() < 25){
@@ -441,12 +455,15 @@ namespace example
     {
         if(gameplay == PLAYING){
 
+            /// Colisiones entre asteroides y el jugador
             for (auto & asteroide : asteroids)
             {
                 if(asteroide->is_visible() && asteroide->intersects(*player)){
                     state = GAME_OVER;
                 }
             }
+            /// Colisiones entre asteroides y balas
+            /// Crea pequeños asteroides al disparar a uno grande
             for (auto & bullet : bullets)
             {
                 for (auto & asteroide : asteroids)
@@ -475,6 +492,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Muestra el texto de carga
     void Game_Scene::render_loading (Canvas & canvas)
     {
         Texture_2D * loading_texture = textures[ID(loading)].get ();
@@ -496,6 +514,7 @@ namespace example
     void Game_Scene::render_playfield (Canvas & canvas)
     {
         if(gameplay == PLAYING || gameplay == WAITING_TO_START){
+            /// Dibuja al jugador y lo gira dependiendo del ángulo
             for (auto & sprite : sprites)
             {
                 Transformation2f transformacion = rotate_then_translate_2d(angle, Vector2f(-(cos(angle) * player->get_position_x() - sin(angle) * player->get_position_y()) + player->get_position_x(), -(sin(angle) * player->get_position_x() + cos(angle) * player->get_position_y()) + player->get_position_y()));
@@ -503,15 +522,17 @@ namespace example
                 sprite->render (canvas);
                 canvas.set_transform (Transformation2f());
             }
+            /// Dibuja las balas
             for (auto & bullet : bullets)
             {
                 bullet->render (canvas);
             }
+            /// Dibuja los asteroides
             for (auto & asteroid : asteroids)
             {
                 asteroid->render (canvas);
             }
-
+            /// Dibuja el botón de avance
             canvas.fill_rectangle
                     (
                             { canvas_width * .9f, canvas_height * .2f },
@@ -520,32 +541,35 @@ namespace example
                     );
         }
         if(gameplay == PLAYING){
+            /// Dibuja el botón de avance
             canvas.fill_rectangle
                     (
                             { canvas_width * .9f, canvas_height * .2f },
                             { 100, 100 },
                             textures[ID(forward)]. get ()
                     );
+            /// Dibuja el botón de disparo
             canvas.fill_rectangle
                     (
                             { canvas_width * .8f, canvas_height * .2f },
                             { 100, 100 },
                             textures[ID(shoot)]. get ()
                     );
-
+            /// Dibuja el botón de giro izquierdo
             canvas.fill_rectangle
                     (
                             { canvas_width * .1f, canvas_height * .2f },
                             { 100, 100 },
                             textures[ID(left)]. get ()
                     );
+            /// Dibuja el botón de giro derecho
             canvas.fill_rectangle
                     (
                             { canvas_width * .2f, canvas_height * .2f },
                             { 100, 100 },
                             textures[ID(right)]. get ()
                     );
-
+            /// Dibuja el botón de pausa
             canvas.fill_rectangle
                     (
                             { canvas_width * .1f, canvas_height * .85f },
@@ -555,6 +579,7 @@ namespace example
         }
     }
 
+    /// Dibuja la pantalla de pausa
     void Game_Scene::render_pause (Canvas & canvas)
     {
         canvas.fill_rectangle
@@ -565,6 +590,7 @@ namespace example
                 );
     }
 
+    /// Dibuja la pantalla de GameOver
     void Game_Scene::render_gameOver (Canvas & canvas)
     {
         canvas.fill_rectangle
