@@ -21,6 +21,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Configura la escena al abrirse
     bool Intro_Scene::initialize ()
     {
         if (state == UNINITIALIZED)
@@ -41,6 +42,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Actualiza la escena dependiendo de su estado
     void Intro_Scene::update (float time)
     {
         if (!suspended) switch (state)
@@ -56,6 +58,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Dibuja los logos por orden y cambia de opacidad
     void Intro_Scene::render (Graphics_Context::Accessor & context)
     {
         if (!suspended)
@@ -104,6 +107,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Carga las texturas
     void Intro_Scene::update_loading ()
     {
         Graphics_Context::Accessor context = director.lock_graphics_context ();
@@ -131,6 +135,7 @@ namespace example
         }
     }
 
+    /// Cambia el valor de la variable opacidad para crear el efecto del Fade In
     void Intro_Scene::update_fading_in ()
     {
         float elapsed_seconds = timer.get_elapsed_seconds ();
@@ -148,6 +153,7 @@ namespace example
         }
     }
 
+    /// Espera un tiempo hasta comenzar el Fade Out
     void Intro_Scene::update_waiting ()
     {
         // Se esperan dos segundos sin hacer nada:
@@ -161,6 +167,8 @@ namespace example
         }
     }
 
+    /// Cambia el valor de la variable opacidad para crear el efecto del Fade Out y pasa al siguiente
+    /// logo o indica que la escena ha terminado
     void Intro_Scene::update_fading_out ()
     {
         float elapsed_seconds = timer.get_elapsed_seconds ();

@@ -57,7 +57,7 @@ namespace example
         bool     sceneOver;                                 ///< Indica si ya han aparecido todos los logos y puede cambiar de escena
 
         std::shared_ptr < Texture_2D > logo_texture;        ///< Logo Asteroids
-        std::shared_ptr < Texture_2D > esne_texture;        ///< Logo de Esne
+        std::shared_ptr < Texture_2D > esne_texture;        ///< Logo Esne
 
     public:
 

@@ -40,20 +40,20 @@
                 READY,
                 ERROR
             };
-
+            /// Representa las distintas pantallas del menú.
             enum Screen{
                 MENU,
                 INSTRUCCIONES_TEXTO,
                 CREDITOS_TEXTO
             };
-
+            /// Lista de opciones del menú principal.
             enum Option_Id
             {
                 JUGAR,
                 INSTRUCCIONES,
                 CREDITOS
             };
-
+            /// Estructura de las opciones del menú principal
             struct Option
             {
                 Point2f position;
@@ -65,7 +65,7 @@
         private:
 
             State    state;                                     ///< Estado de la escena.
-            Screen   screen;
+            Screen   screen;                                    ///< Pantalla actual.
             bool     suspended;                                 ///< true cuando la escena está en segundo plano y viceversa.
 
             unsigned canvas_width;                              ///< Ancho de la resolución virtual usada para dibujar.
@@ -85,6 +85,7 @@
 
         public:
 
+            /// Constructor
             Menu_Scene();
 
             /**

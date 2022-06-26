@@ -89,13 +89,13 @@
             Sprite_List    sprites;                             ///< Lista en la que se guardan shared_ptr a los sprites creados.
 
             Sprite       * player;                              ///< Puntero al sprite de la lista de sprites que representa al jugador derecho.
-            float          angle;
-            bool move;
-            bool right;
-            bool left;
+            float          angle;                               ///< Ángulo de giro del jugador
+            bool move;                                          ///< Indica si está avanzando
+            bool right;                                         ///< Indica si está girando a la derecha
+            bool left;                                          ///< Indica si está girando a la izquierda
 
-            Sprite_List    bullets;
-            Sprite_List    asteroids;
+            Sprite_List    bullets;                             ///< Conjunto de balas
+            Sprite_List    asteroids;                           ///< Conjunto de asteroides
 
             Timer          timer;                               ///< Cronómetro usado para medir intervalos de tiempo
 
@@ -165,27 +165,26 @@
             void create_sprites ();
 
             /**
-             * Se llama cada vez que se debe reiniciar el juego. En concreto la primera vez y cada
-             * vez que un jugador pierde.
+             * Se llama cada vez que se debe reiniciar el juego.
              */
             void restart_game ();
 
             /**
-             * Cuando se ha reiniciado el juego y el usuario toca la pantalla por primera vez se
-             * pone la bola en movimiento en una dirección al azar.
+             * Comienza el juego tras el primer toque.
              */
             void start_playing ();
 
             /**
-             * Actualiza el estado del juego cuando el estado de la escena es RUNNING.
+             * Actualiza el estado de la escena cuando el estado es RUNNING.
              */
             void run_simulation (float time);
 
             /**
-             * Hace que el player derecho se mueva hacia el punto de la pantalla que toca el usuario.
+             * Controla al jugadpr.
              */
             void update_user ();
 
+            /// Comprueba las colisiones de los asteroides, las balas y el jugador.
             void check_collisions ();
 
             /**
@@ -201,8 +200,16 @@
              */
             void render_playfield (Canvas & canvas);
 
+            /**
+             * Dibuja la escena de juego cuando el estado de la escena es PAUSE.
+             * @param canvas Referencia al Canvas con el que dibujar.
+             */
             void render_pause (Canvas & canvas);
 
+            /**
+             * Dibuja la escena de juego cuando el estado de la escena es GAME_OVER.
+             * @param canvas Referencia al Canvas con el que dibujar.
+             */
             void render_gameOver (Canvas & canvas);
 
         };
