@@ -35,8 +35,8 @@ namespace example
         { ID(forward),"game-scene/forward.png"},
         { ID(right),"game-scene/right.png"},
         { ID(left),"game-scene/left.png"},
-        { ID(shoot),"game-scene/shoot.png"}
-
+        { ID(shoot),"game-scene/shoot.png"},
+        { ID(gameOver),"game-scene/gameOver.png"}
     };
 
     // Pâra determinar el número de items en el array textures_data, se divide el tamaño en bytes
@@ -210,6 +210,9 @@ namespace example
         else if(state == PAUSE){
             state = RUNNING;
         }
+        else if(state == GAME_OVER){
+            director.run_scene (shared_ptr< Scene >(new Menu_Scene));
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -253,6 +256,7 @@ namespace example
                     case LOADING: render_loading   (*canvas); break;
                     case RUNNING: render_playfield (*canvas); break;
                     case PAUSE: render_pause (*canvas); break;
+                    case GAME_OVER: render_gameOver(*canvas); break;
                     case ERROR:   break;
                 }
             }
@@ -440,7 +444,7 @@ namespace example
             for (auto & asteroide : asteroids)
             {
                 if(asteroide->is_visible() && asteroide->intersects(*player)){
-                    ///Ir a escena GameOver
+                    state = GAME_OVER;
                 }
             }
             for (auto & bullet : bullets)
@@ -558,6 +562,16 @@ namespace example
                         { canvas_width * .5f, canvas_height * .5f },
                         { (textures[ID(pausa)]->get_width ()), (textures[ID(pausa)]->get_height ()) },
                         textures[ID(pausa)]. get ()
+                );
+    }
+
+    void Game_Scene::render_gameOver (Canvas & canvas)
+    {
+        canvas.fill_rectangle
+                (
+                        { canvas_width * .5f, canvas_height * .5f },
+                        { (textures[ID(gameOver)]->get_width ()), (textures[ID(gameOver)]->get_height ()) },
+                        textures[ID(gameOver)]. get ()
                 );
     }
 

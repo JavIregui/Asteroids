@@ -50,6 +50,7 @@
                 LOADING,
                 RUNNING,
                 PAUSE,
+                GAME_OVER,
                 ERROR
             };
 
@@ -201,6 +202,8 @@
             void render_playfield (Canvas & canvas);
 
             void render_pause (Canvas & canvas);
+
+            void render_gameOver (Canvas & canvas);
 
         };
 
