@@ -19,7 +19,7 @@ using namespace std;
 
 namespace example
 {
-
+    /// Constructor
     Menu_Scene::Menu_Scene()
     {
         state         = LOADING;
@@ -31,6 +31,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Resetea los botones
     bool Menu_Scene::initialize ()
     {
         for (auto & option : options)
@@ -43,6 +44,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Controla los eventos táctiles
     void Menu_Scene::handle (basics::Event & event)
     {
         if (state == READY)                     // Se descartan los eventos cuando la escena está LOADING
@@ -106,6 +108,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Carga las texturas
     void Menu_Scene::update (float time)
     {
         if (!suspended) if (state == LOADING)
@@ -146,6 +149,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Dibuja la pantalla correspondiente
     void Menu_Scene::render (Graphics_Context::Accessor & context)
     {
         if (!suspended)
@@ -224,6 +228,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Configura las opciones del menú principal para poder dibujarlas e interactuar con ellas
     void Menu_Scene::configure_options ()
     {
         // Se calcula la altura total del menú:
@@ -249,6 +254,7 @@ namespace example
 
     // ---------------------------------------------------------------------------------------------
 
+    /// Comprueba qué opción se ha tocado
     int Menu_Scene::option_at (const Point2f & point)
     {
         for (int index = 0; index < number_of_options; ++index)
