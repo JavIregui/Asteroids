@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="Mi Banner">
+</p>
+
 # Asteroids
 
 **Asteroids** is my C++ implementation of the famous arcade game created by Atari in the 70's. The game allows the player to avoid being hit by asteroids while trying to shoot and break them into smaller pieces until they're gone.
