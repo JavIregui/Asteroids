@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Mi Banner">
+  <img src="assets/Banner.png" alt="Banner">
 </p>
 
 # Asteroids
